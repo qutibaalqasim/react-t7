@@ -1,7 +1,19 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { UserContext } from './context/User';
 
-export default function Navbar({isLogin, handleLogOut,userData}) {
+export default function Navbar() {
+  const {isLogin,userData, setIsLogin, setUserData} = useContext(UserContext);
+  
+   const navigate = useNavigate();
+
+  function handleLogOut(){
+    localStorage.removeItem('userToken');
+    setIsLogin(false);
+    setUserData({});
+    navigate('/login');
+  };
+  
   return (
    <nav className="navbar navbar-expand-lg bg-body-tertiary">
   <div className="container">
@@ -18,7 +30,7 @@ export default function Navbar({isLogin, handleLogOut,userData}) {
           <Link className="nav-link" to={'/'}>Home</Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to={'/'}>Welcome {userData.userName}</Link>
+          <Link className="nav-link" to={'/profile'}>Welcome {userData.userName} </Link>
         </li>
 
         <li className="nav-item">

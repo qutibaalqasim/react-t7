@@ -1,45 +1,57 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from './components/Navbar'
 import Home from './components/Home'
-import { Route, Routes } from 'react-router-dom'
+import {  RouterProvider, createBrowserRouter } from 'react-router-dom'
 import LogIn from './components/LogIn'
 import Register from './components/Register'
-import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode";
+import Root from './assets/Root';
+import Profile from './components/Profile'
+import UserContextProvider from './components/context/User'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 export default function App() {
 
-  const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(localStorage.getItem('userToken')? true : false);
-  const [userData, setUserData] = useState({});
-
-  useEffect(()=>{
-    const token = localStorage.getItem('userToken');
-    if(token){
-      const decodedToken = jwtDecode(token);
-      setUserData(decodedToken);
-      setIsLogin(true);
-    }
-  },[]);
-
-  function handleLogOut(){
-    localStorage.removeItem('userToken');
-    setIsLogin(false);
-    setUserData({});
-    navigate('/login');
-  }
+  const router = createBrowserRouter([
+   {
+    path:'/',
+    element: <Root />,
+    children:[
+      {
+        path: '/',
+        element: <Home />
+      },
+      {
+        path: '/login',
+        element: 
+        
+        <LogIn/>
+        
+      },
+      {
+        path: '/register',
+        element:
+       
+            <Register />
+        
+        
+      },
+      {
+        path: '/profile',
+        element: <Profile />
+      }
+    ]
+   }
+   
+  ]);
 
   return (
-    <>
-    <Navbar isLogin = {isLogin} handleLogOut={handleLogOut} userData={userData} />
-    <Routes>
-      <Route path='/' element ={<Home />}> </Route>
-      <Route path='/login' element ={<LogIn setIsLogin={setIsLogin} setUserData={setUserData}/>}> </Route>
-      <Route path='/register' element ={<Register />}> </Route>
-      <Route path='/*' element ={<h2>page not found</h2>}> </Route>
-    </Routes>
+    <UserContextProvider>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </UserContextProvider>
 
-    </>
-    
   )
 }
