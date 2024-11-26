@@ -1,16 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import { Route, Routes } from 'react-router-dom'
 import LogIn from './components/LogIn'
 import Register from './components/Register'
 import { useNavigate } from 'react-router-dom'
+import { jwtDecode } from "jwt-decode";
 
 export default function App() {
 
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(localStorage.getItem('userToken')? true : false);
   const [userData, setUserData] = useState({});
+
+  useEffect(()=>{
+    const token = localStorage.getItem('userToken');
+    if(token){
+      const decodedToken = jwtDecode(token);
+      setUserData(decodedToken);
+      setIsLogin(true);
+    }
+  },[]);
 
   function handleLogOut(){
     localStorage.removeItem('userToken');
