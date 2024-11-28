@@ -26,9 +26,7 @@ export default function Navbar() {
 
         {
           isLogin? <>
-          <li className="nav-item">
-          <Link className="nav-link" to={'/'}>Home</Link>
-        </li>
+          
         <li className="nav-item">
           <Link className="nav-link" to={'/profile'}>Welcome {userData.userName} </Link>
         </li>
@@ -46,6 +44,9 @@ export default function Navbar() {
           <li className="nav-item">
           <Link className="nav-link" to={'/register'}>Register</Link>
           </li>
+          <li className="nav-item">
+          <Link className="nav-link" to={'/'}>Home</Link>
+        </li>
           </>
 
         }

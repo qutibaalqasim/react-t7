@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React  from 'react'
 import Home from './components/Home'
 import {  RouterProvider, createBrowserRouter } from 'react-router-dom'
 import LogIn from './components/LogIn'
 import Register from './components/Register'
-import { jwtDecode } from "jwt-decode";
 import Root from './assets/Root';
 import Profile from './components/Profile'
 import UserContextProvider from './components/context/User'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ProtectedRouter, PublicRoute } from './components/ProtectedRouter'
+
 
 
 
@@ -21,26 +22,37 @@ export default function App() {
     children:[
       {
         path: '/',
-        element: <Home />
+        element: 
+        <ProtectedRouter>
+          <Home />
+        </ProtectedRouter>
       },
       {
         path: '/login',
         element: 
-        
-        <LogIn/>
+        <PublicRoute>
+
+          <LogIn/>
+
+        </PublicRoute>
         
       },
       {
         path: '/register',
         element:
-       
-            <Register />
+       <PublicRoute>
+
+         <Register />
+       </PublicRoute>
         
         
       },
       {
         path: '/profile',
-        element: <Profile />
+        element:
+        <ProtectedRouter>
+        <Profile />
+        </ProtectedRouter>
       }
     ]
    }
@@ -49,7 +61,9 @@ export default function App() {
 
   return (
     <UserContextProvider>
+      <div className="container">
       <RouterProvider router={router} />
+      </div>
       <ToastContainer />
     </UserContextProvider>
 
